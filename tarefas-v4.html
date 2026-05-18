@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Tarefas</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+:root{
+  --cream:#FEF9F0;--blue:#2B5BA8;--blue-light:#5B84CC;--blue-pale:#D6E4F7;
+  --green:#2D7A4F;--green-light:#E8F5EE;--red:#C41230;--gold:#D4A017;
+  --caramel:#B07830;--ink:#1A1008;--muted:#8A7860;--white:#FFFFFF;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--ink);
+  display:flex;flex-direction:column;max-width:430px;margin:0 auto;height:100dvh}
+
+/* ── HEADER ── */
+.header{position:relative;overflow:hidden;flex-shrink:0;background:#B8CED8}
+
+/* Sky */
+.sky{width:100%;height:130px;background:linear-gradient(180deg,#C8DCF0 0%,#DDE8F0 60%,#C0CCD4 100%);position:relative}
+
+/* Clouds */
+.cloud{position:absolute;background:white;border-radius:50%;opacity:0.82}
+
+/* Serra da Estrela mountains SVG */
+.mountains-svg{position:absolute;bottom:0;left:0;width:100%;display:block}
+
+/* Snow road */
+.header-overlay{position:relative;z-index:3;padding:14px 18px 0;display:flex;align-items:flex-start;justify-content:space-between}
+
+.date-line{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:#2B4060;opacity:.8;margin-bottom:3px}
+.app-title{font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;color:#1A2A40;line-height:1;text-shadow:0 1px 3px rgba(255,255,255,.6)}
+.app-title em{font-style:italic;font-weight:300;font-size:20px;display:block;color:#2B5BA8;margin-top:1px}
+
+/* Rooster */
+.rooster-wrap{flex-shrink:0;animation:bob 5s ease-in-out infinite;transform-origin:center bottom}
+@keyframes bob{0%,100%{transform:rotate(-2deg)}50%{transform:rotate(2deg)}}
+
+/* Nata row */
+.nata-row{display:flex;align-items:center;gap:3px;margin-top:8px;height:26px}
+.nata{font-size:19px;filter:grayscale(1) opacity(.2);transition:all .4s cubic-bezier(.34,1.56,.64,1);line-height:1}
+.nata.on{filter:none;animation:nataIn .45s cubic-bezier(.34,1.56,.64,1)}
+@keyframes nataIn{0%{transform:scale(.3) rotate(-15deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
+
+/* ── AZULEJO BAR ── */
+.azulejo-bar{height:18px;background:#2B5BA8;flex-shrink:0;position:relative;overflow:hidden}
+
+/* ── WAVES ── */
+.waves{position:relative;height:42px;background:#4A9EC4;flex-shrink:0;overflow:hidden}
+.wave{position:absolute;bottom:0;left:0;width:200%;height:100%}
+.wave.w1{animation:waveMove 5s linear infinite;opacity:.9}
+.wave.w2{animation:waveMove 7s linear infinite reverse;opacity:.45}
+@keyframes waveMove{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.waves-label{position:absolute;top:7px;left:18px;font-size:9px;color:rgba(255,255,255,.65);letter-spacing:.18em;text-transform:uppercase;font-weight:700;z-index:2}
+.boat{position:absolute;top:5px;right:20px;font-size:18px;z-index:2;animation:bob 3s ease-in-out infinite}
+
+/* ── NATA BAR ── */
+.nata-bar{background:#2E1503;padding:10px 18px;display:flex;align-items:center;gap:5px;border-bottom:3px solid var(--caramel);flex-shrink:0}
+.nata-bar-label{font-size:9px;color:var(--gold);letter-spacing:.12em;text-transform:uppercase;font-weight:700;margin-right:2px;flex-shrink:0}
+.natas{display:flex;gap:3px;flex:1}
+.nata-count{font-size:10px;color:var(--gold);font-weight:700;flex-shrink:0}
+
+/* ── CONTENT ── */
+.content{flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:80px;background:var(--cream)}
+
+.section-label{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);padding:14px 18px 5px;display:flex;align-items:center;justify-content:space-between}
+
+.hide-done-btn{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:none;border:1px solid var(--blue-pale);border-radius:12px;padding:3px 10px;color:var(--blue);cursor:pointer;font-family:'Nunito',sans-serif;transition:all .15s}
+.hide-done-btn:hover{background:var(--blue-pale)}
+.hide-done-btn.active{background:var(--blue);color:white;border-color:var(--blue)}
+
+.clear-done-btn{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;background:none;border:1px solid #f0c0c8;border-radius:12px;padding:3px 10px;color:var(--red);cursor:pointer;font-family:'Nunito',sans-serif;transition:all .15s;margin-left:6px}
+.clear-done-btn:hover{background:#fae8ec}
+
+/* ── ADD ROW ── */
+.add-row{display:flex;align-items:center;gap:10px;padding:12px 18px;background:white;border-bottom:1px solid var(--blue-pale);border-top:1px solid var(--blue-pale);margin-bottom:2px}
+.add-row input{flex:1;border:none;background:transparent;font-family:'Nunito',sans-serif;font-size:15px;font-weight:400;color:var(--ink);outline:none}
+.add-row input::placeholder{color:#C0AE90}
+.add-btn{width:30px;height:30px;border:2px solid var(--blue);background:transparent;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--blue);font-size:20px;line-height:1;transition:all .15s;flex-shrink:0}
+.add-btn:hover{background:var(--blue);color:white}
+
+.date-row{display:flex;align-items:center;gap:8px;padding:8px 18px 12px;background:white;border-bottom:1px solid var(--blue-pale);margin-bottom:2px}
+.date-row label{font-size:11px;color:var(--muted);font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.date-row input[type=date]{border:1px solid var(--blue-pale);border-radius:8px;padding:4px 10px;font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink);outline:none;background:var(--cream);cursor:pointer}
+.save-task-btn{margin-left:auto;background:var(--blue);color:white;border:none;border-radius:20px;padding:5px 14px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;cursor:pointer;letter-spacing:.05em}
+
+/* ── TASK ITEM ── */
+.task-item{display:flex;align-items:flex-start;gap:12px;padding:13px 18px;background:white;border-bottom:1px solid #EEE8D8;transition:opacity .2s;animation:taskIn .2s ease;position:relative}
+.task-item::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--blue-light);opacity:0;transition:opacity .2s}
+.task-item:hover::before{opacity:.4}
+.task-item.done::before{background:var(--caramel);opacity:.5}
+.task-item:nth-child(odd){background:#fdfaf3}
+@keyframes taskIn{from{opacity:0;transform:translateX(-8px)}to{opacity:1;transform:translateX(0)}}
+.task-item.done{opacity:.45}
+
+.check-box{width:20px;height:20px;border:2px solid var(--blue-light);border-radius:5px;cursor:pointer;flex-shrink:0;margin-top:1px;display:flex;align-items:center;justify-content:center;transition:all .15s;background:transparent}
+.task-item.done .check-box{background:var(--caramel);border-color:var(--caramel)}
+.check-mark{color:white;font-size:11px;font-weight:700;opacity:0;transition:.15s}
+.task-item.done .check-mark{opacity:1}
+
+.task-body{flex:1;min-width:0}
+.task-text{font-size:15px;line-height:1.45;cursor:pointer;word-break:break-word}
+.task-item.done .task-text{text-decoration:line-through;color:var(--muted)}
+.task-meta{display:flex;align-items:center;gap:8px;margin-top:3px;flex-wrap:wrap}
+.task-date{font-size:10px;color:var(--blue-light);font-weight:600}
+.task-date.overdue{color:var(--red)}
+.task-date.today-badge{background:var(--green-light);color:var(--green);padding:1px 7px;border-radius:10px;font-weight:700}
+.schedule-btn{background:none;border:1px solid var(--blue-pale);border-radius:12px;padding:2px 8px;font-size:10px;color:var(--blue);cursor:pointer;font-family:'Nunito',sans-serif;font-weight:700;transition:all .15s}
+.schedule-btn:hover{background:var(--blue-pale)}
+.del-btn{background:none;border:none;color:#DDD;cursor:pointer;font-size:16px;padding:0;line-height:1;transition:color .15s;flex-shrink:0}
+.del-btn:hover{color:var(--red)}
+
+.inline-date-picker{padding:8px 18px 12px 50px;background:white;border-bottom:1px solid #EEE8D8;display:flex;align-items:center;gap:8px;animation:taskIn .15s ease}
+.inline-date-picker input[type=date]{border:1px solid var(--blue-pale);border-radius:8px;padding:5px 10px;font-family:'Nunito',sans-serif;font-size:12px;color:var(--ink);outline:none;background:var(--cream)}
+.inline-date-picker button{background:var(--blue);color:white;border:none;border-radius:14px;padding:5px 14px;font-family:'Nunito',sans-serif;font-size:11px;font-weight:700;cursor:pointer}
+.inline-date-picker .cancel-btn{background:#aaa}
+
+.empty-state{text-align:center;padding:48px 28px;color:var(--muted)}
+.empty-icon{font-size:34px;margin-bottom:10px;opacity:.5}
+.empty-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px}
+
+/* ── TAB BAR ── */
+.tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:white;border-top:1px solid var(--blue-pale);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom,0);box-shadow:0 -4px 20px rgba(43,91,168,.08)}
+.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px 8px;background:none;border:none;cursor:pointer;color:var(--muted);transition:color .2s;font-family:'Nunito',sans-serif;position:relative}
+.tab-icon{font-size:19px;line-height:1}
+.tab-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.tab-badge{position:absolute;top:5px;right:calc(50% - 18px);background:var(--red);color:white;font-size:8px;font-weight:700;border-radius:10px;padding:1px 5px;min-width:15px;text-align:center}
+.tab-btn.active{color:var(--blue)}
+.tab-btn.active .tab-icon{transform:translateY(-2px)}
+.hidden{display:none!important}
+</style>
+</head>
+<body>
+
+<!-- ═══ HEADER ═══ -->
+<div class="header">
+  <!-- Sky -->
+  <div class="sky">
+    <!-- Clouds -->
+    <div class="cloud" style="width:90px;height:36px;top:12px;left:30px;opacity:.75"></div>
+    <div class="cloud" style="width:60px;height:26px;top:8px;left:55px;opacity:.9"></div>
+    <div class="cloud" style="width:50px;height:22px;top:18px;left:10px;opacity:.6"></div>
+    <div class="cloud" style="width:100px;height:38px;top:6px;right:20px;opacity:.7"></div>
+    <div class="cloud" style="width:65px;height:28px;top:14px;right:40px;opacity:.85"></div>
+    <div class="cloud" style="width:45px;height:20px;top:24px;right:10px;opacity:.55"></div>
+
+    <!-- Serra da Estrela Mountains SVG -->
+    <svg class="mountains-svg" viewBox="0 0 430 90" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMax slice">
+      <!-- Far background mountains (lighter) -->
+      <path d="M0 90 L0 70 Q30 45 60 38 Q85 32 110 48 Q130 38 155 22 Q175 10 195 25 Q210 14 225 20 Q240 10 258 28 Q272 18 290 30 Q315 20 335 35 Q355 25 375 38 Q400 30 420 42 L430 48 L430 90Z" fill="#C8D4DA"/>
+      <!-- Mid mountains (grey-white snowy) -->
+      <path d="M0 90 L0 78 Q20 62 45 55 Q65 48 80 60 Q100 44 120 36 Q138 28 155 42 Q168 30 183 22 Q198 14 212 26 Q225 16 240 24 Q255 12 268 30 Q280 20 298 34 Q318 24 338 40 Q355 30 372 44 Q390 34 410 48 L430 52 L430 90Z" fill="#D8E4E8"/>
+      <!-- Main peaks (darker rocky) -->
+      <path d="M0 90 L0 82 Q15 72 30 68 Q50 60 65 70 Q80 56 95 48 Q112 38 128 52 Q142 40 158 30 Q172 20 186 34 Q196 22 208 18 Q220 10 232 20 Q244 12 256 26 Q268 18 282 32 Q298 22 315 38 Q330 28 348 44 Q362 34 378 48 Q395 38 412 50 L430 55 L430 90Z" fill="#8A9EA8"/>
+      <!-- Snow caps -->
+      <path d="M158 30 Q172 20 186 34 Q180 26 172 22 Q165 18 158 30Z" fill="white" opacity=".9"/>
+      <path d="M208 18 Q220 10 232 20 Q225 14 217 12 Q212 11 208 18Z" fill="white" opacity=".95"/>
+      <path d="M95 48 Q112 38 128 52 Q118 42 107 40 Q100 39 95 48Z" fill="white" opacity=".75"/>
+      <path d="M256 26 Q268 18 282 32 Q273 22 264 20 Q259 19 256 26Z" fill="white" opacity=".8"/>
+      <!-- Snow patches on slopes -->
+      <path d="M165 36 Q172 30 178 36 Q174 38 168 37Z" fill="white" opacity=".7"/>
+      <path d="M212 24 Q218 18 224 24 Q220 26 214 25Z" fill="white" opacity=".8"/>
+      <path d="M100 52 Q107 46 114 52 Q110 54 103 53Z" fill="white" opacity=".6"/>
+      <path d="M260 30 Q266 24 272 30 Q268 32 262 31Z" fill="white" opacity=".65"/>
+      <!-- Foreground slope/valley -->
+      <path d="M0 90 L0 88 Q60 80 120 82 Q180 84 230 78 Q280 72 330 80 Q380 86 430 84 L430 90Z" fill="#B0C0C8"/>
+      <!-- Road winding through valley -->
+      <path d="M60 90 Q90 84 120 86 Q150 88 180 82 Q200 78 220 80" fill="none" stroke="white" stroke-width="1.5" opacity=".4" stroke-dasharray="4,3"/>
+    </svg>
+
+    <!-- Overlay content (title + rooster) -->
+    <div class="header-overlay">
+      <div>
+        <div class="date-line" id="dateEl"></div>
+        <div class="app-title">Tarefas<em>de Portugal</em></div>
+        <div class="nata-row" id="nataRow"></div>
+      </div>
+      <!-- Barcelos Rooster -->
+      <div class="rooster-wrap">
+        <svg width="72" height="90" viewBox="0 0 120 148" xmlns="http://www.w3.org/2000/svg">
+          <!-- Base -->
+          <ellipse cx="60" cy="136" rx="32" ry="10" fill="#1B6FC4"/>
+          <rect x="40" y="126" width="40" height="14" rx="7" fill="#1B6FC4"/>
+          <!-- Tail -->
+          <path d="M32 95 Q10 78 8 50 Q18 68 24 85 Q28 92 32 95Z" fill="#1A1008"/>
+          <path d="M28 105 Q4 88 4 58 Q14 76 20 95 Q24 100 28 105Z" fill="#1A1008"/>
+          <path d="M26 115 Q6 102 8 75 Q16 90 22 108 Q24 112 26 115Z" fill="#222"/>
+          <!-- Body -->
+          <ellipse cx="62" cy="100" rx="40" ry="42" fill="#1A1008"/>
+          <!-- White dot arc top -->
+          <circle cx="32" cy="74" r="3.2" fill="white"/>
+          <circle cx="44" cy="65" r="3.2" fill="white"/>
+          <circle cx="57" cy="61" r="3.2" fill="white"/>
+          <circle cx="70" cy="63" r="3.2" fill="white"/>
+          <circle cx="82" cy="70" r="3.2" fill="white"/>
+          <circle cx="90" cy="80" r="3.2" fill="white"/>
+          <!-- White dot arc bottom -->
+          <circle cx="32" cy="126" r="3.2" fill="white"/>
+          <circle cx="44" cy="133" r="3.2" fill="white"/>
+          <circle cx="57" cy="136" r="3.2" fill="white"/>
+          <circle cx="70" cy="134" r="3.2" fill="white"/>
+          <circle cx="82" cy="128" r="3.2" fill="white"/>
+          <circle cx="90" cy="118" r="3.2" fill="white"/>
+          <!-- Big heart -->
+          <path d="M72 96 C72 88 63 82 57 87 C51 82 42 88 42 96 C42 107 57 118 57 118 C57 118 72 107 72 96Z" fill="#C41230"/>
+          <!-- Small heart upper -->
+          <path d="M86 80 C86 76 81 73 78 75 C75 73 70 76 70 80 C70 86 78 91 78 91 C78 91 86 86 86 80Z" fill="#C41230"/>
+          <!-- Flower left -->
+          <circle cx="38" cy="106" r="5" fill="#E8D020"/>
+          <circle cx="38" cy="96" r="4" fill="#2B8AE0"/>
+          <circle cx="38" cy="116" r="4" fill="#2B8AE0"/>
+          <circle cx="30" cy="106" r="4" fill="#C41230"/>
+          <circle cx="46" cy="106" r="4" fill="#C41230"/>
+          <circle cx="38" cy="106" r="4" fill="#E8D020"/>
+          <!-- Flower right -->
+          <circle cx="90" cy="100" r="4.5" fill="#E8D020"/>
+          <circle cx="90" cy="92" r="3.5" fill="#C41230"/>
+          <circle cx="90" cy="108" r="3.5" fill="#C41230"/>
+          <circle cx="83" cy="100" r="3.5" fill="#2D7A4F"/>
+          <circle cx="97" cy="100" r="3.5" fill="#2D7A4F"/>
+          <circle cx="90" cy="100" r="3.5" fill="#E8D020"/>
+          <!-- Neck -->
+          <path d="M60 64 Q66 50 74 40 Q80 32 82 24 Q77 34 70 46 Q64 56 60 64Z" fill="#1A1008"/>
+          <!-- Head -->
+          <ellipse cx="82" cy="22" rx="28" ry="22" fill="#1A1008"/>
+          <!-- Comb -->
+          <path d="M64 14 Q58 2 64 -6 Q67 4 70 -4 Q73 -12 77 -4 Q80 -12 84 -4 Q87 -12 91 -2 Q94 8 88 16 Q78 20 68 16Z" fill="#C41230"/>
+          <!-- Wattle -->
+          <path d="M100 26 Q112 34 109 46 Q103 50 96 44 Q91 36 94 26Z" fill="#C41230"/>
+          <!-- Eye -->
+          <circle cx="94" cy="18" r="8" fill="#E8D020"/>
+          <circle cx="94" cy="18" r="5" fill="#1A1008"/>
+          <circle cx="92" cy="16" r="2" fill="#2A1808"/>
+          <circle cx="91" cy="15" r="1" fill="white"/>
+          <!-- Beak -->
+          <path d="M106 22 L120 25 L106 30Z" fill="#E8D020"/>
+          <!-- Legs -->
+          <rect x="54" y="124" width="8" height="10" rx="3" fill="#1A1008"/>
+          <rect cx="70" y="124" width="8" height="10" rx="3" fill="#1A1008"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- AZULEJO -->
+<div class="azulejo-bar">
+  <svg width="100%" height="18" viewBox="0 0 430 18" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMinYMin slice">
+    <defs>
+      <pattern id="az" x="0" y="0" width="36" height="18" patternUnits="userSpaceOnUse">
+        <rect width="36" height="18" fill="#2B5BA8"/>
+        <rect x=".5" y=".5" width="35" height="17" fill="none" stroke="#5B84CC" stroke-width=".5"/>
+        <path d="M18 0 Q27 9 18 18 Q9 9 18 0Z" fill="none" stroke="#5B84CC" stroke-width=".7"/>
+        <circle cx="18" cy="9" r="3" fill="none" stroke="#8AAAE0" stroke-width=".5"/>
+        <circle cx="0" cy="9" r="1.8" fill="#8AAAE0" opacity=".4"/>
+        <circle cx="36" cy="9" r="1.8" fill="#8AAAE0" opacity=".4"/>
+        <circle cx="18" cy="0" r="1.4" fill="#8AAAE0" opacity=".3"/>
+        <circle cx="18" cy="18" r="1.4" fill="#8AAAE0" opacity=".3"/>
+      </pattern>
+    </defs>
+    <rect width="430" height="18" fill="url(#az)"/>
+  </svg>
+</div>
+
+<!-- OCEAN WAVES -->
+<div class="waves">
+  <div class="waves-label">oceano atlântico</div>
+  <div class="boat">⛵</div>
+  <svg class="wave w1" viewBox="0 0 1600 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 24 Q100 6 200 24 Q300 42 400 24 Q500 6 600 24 Q700 42 800 24 Q900 6 1000 24 Q1100 42 1200 24 Q1300 6 1400 24 Q1500 42 1600 24 L1600 42 L0 42Z" fill="#EAF4FB"/>
+  </svg>
+  <svg class="wave w2" viewBox="0 0 1600 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
+    <path d="M0 30 Q80 14 160 30 Q240 46 320 30 Q400 14 480 30 Q560 46 640 30 Q720 14 800 30 Q880 46 960 30 Q1040 14 1120 30 Q1200 46 1280 30 Q1360 14 1440 30 Q1520 46 1600 30 L1600 42 L0 42Z" fill="white" opacity=".6"/>
+  </svg>
+</div>
+
+<!-- NATA PROGRESS -->
+<div class="nata-bar">
+  <div class="nata-bar-label">hoje</div>
+  <div class="natas" id="nataBarRow"></div>
+  <div class="nata-count" id="nataCount">0/0</div>
+</div>
+
+<!-- CONTENT -->
+<div class="content" id="contentArea"></div>
+
+<!-- TAB BAR -->
+<nav class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('inbox',this)">
+    <span class="tab-icon">📥</span>
+    <span class="tab-label">Входящие</span>
+    <span class="tab-badge hidden" id="badge-inbox">0</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('today',this)">
+    <span class="tab-icon">☀️</span>
+    <span class="tab-label">Сегодня</span>
+    <span class="tab-badge hidden" id="badge-today">0</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('upcoming',this)">
+    <span class="tab-icon">📅</span>
+    <span class="tab-label">Скоро</span>
+    <span class="tab-badge hidden" id="badge-upcoming">0</span>
+  </button>
+  <button class="tab-btn" onclick="switchTab('all',this)">
+    <span class="tab-icon">🗂</span>
+    <span class="tab-label">Все</span>
+  </button>
+</nav>
+
+<script>
+let tasks = JSON.parse(localStorage.getItem('tarefas-v4') || '[]');
+let currentTab = 'inbox';
+let schedulingId = null;
+let addingTask = false;
+let hideDone = false;
+
+const TODAY = new Date(); TODAY.setHours(0,0,0,0);
+function todayStr(){ return TODAY.toISOString().split('T')[0]; }
+
+const days=['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
+const months=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
+document.getElementById('dateEl').textContent=`${days[TODAY.getDay()]}, ${TODAY.getDate()} de ${months[TODAY.getMonth()]}`;
+
+function save(){ localStorage.setItem('tarefas-v4', JSON.stringify(tasks)); }
+
+function fmtDate(str){
+  const d=new Date(str+'T00:00:00');
+  return `${d.getDate()} ${months[d.getMonth()]}`;
+}
+
+// NATAS
+function renderNatas(){
+  const todayDone = tasks.filter(t=>t.date===todayStr()&&t.done).length;
+  const count = Math.min(todayDone, 8);
+  // header row
+  const row = document.getElementById('nataRow');
+  if(row){ row.innerHTML=''; for(let i=0;i<8;i++){ const n=document.createElement('span'); n.className='nata'+(i<count?' on':''); n.textContent='🥧'; row.appendChild(n); } }
+  // bar row
+  const bar = document.getElementById('nataBarRow');
+  if(bar){ bar.innerHTML=''; for(let i=0;i<8;i++){ const n=document.createElement('span'); n.className='nata'+(i<count?' on':''); n.textContent='🥧'; bar.appendChild(n); } }
+  const todayTotal = tasks.filter(t=>t.date===todayStr()).length;
+  const nc = document.getElementById('nataCount');
+  if(nc) nc.textContent=`${todayDone}/${todayTotal}`;
+}
+
+// BADGES
+function updateBadges(){
+  const inbox=tasks.filter(t=>!t.date&&!t.done).length;
+  const today=tasks.filter(t=>t.date===todayStr()&&!t.done).length;
+  const upcoming=tasks.filter(t=>t.date&&t.date>todayStr()&&!t.done).length;
+  setBadge('inbox',inbox); setBadge('today',today); setBadge('upcoming',upcoming);
+}
+function setBadge(id,n){ const el=document.getElementById('badge-'+id); if(!el)return; if(n>0){el.textContent=n;el.classList.remove('hidden');}else{el.classList.add('hidden');} }
+
+// TABS
+function switchTab(tab,btn){
+  currentTab=tab; schedulingId=null; addingTask=false;
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderContent();
+}
+
+// RENDER
+function renderContent(){
+  const area=document.getElementById('contentArea');
+  let html='';
+
+  const placeholder = currentTab==='inbox'?'добавить во входящие…':currentTab==='today'?'добавить на сегодня…':'nova tarefa…';
+  html+=`<div class="add-row"><input type="text" id="taskInput" placeholder="${placeholder}" maxlength="140"><button class="add-btn" onclick="startAddTask()">+</button></div>`;
+
+  if(addingTask){
+    const defaultDate=currentTab==='today'?todayStr():'';
+    html+=`<div class="date-row"><label>📅 дата</label><input type="date" id="newTaskDate" value="${defaultDate}" min="${todayStr()}"><button class="save-task-btn" onclick="confirmAddTask()">Добавить</button></div>`;
+  }
+
+  let visible=[];
+  let label='';
+  if(currentTab==='inbox'){ visible=tasks.filter(t=>!t.date); label='Входящие'; }
+  else if(currentTab==='today'){ visible=tasks.filter(t=>t.date===todayStr()); label='Сегодня'; }
+  else if(currentTab==='upcoming'){ visible=tasks.filter(t=>t.date&&t.date>todayStr()); label='Предстоящие'; }
+  else{ visible=[...tasks]; label='Все задачи'; }
+
+  const doneCount=visible.filter(t=>t.done).length;
+
+  // Section label + controls
+  html+=`<div class="section-label"><span>${label} · ${visible.length}</span><div>`;
+  if(doneCount>0){
+    html+=`<button class="hide-done-btn${hideDone?' active':''}" onclick="toggleHideDone()">${hideDone?'👁 показать':'🙈 скрыть'} выполненные</button>`;
+    html+=`<button class="clear-done-btn" onclick="clearDone()">🗑 удалить</button>`;
+  }
+  html+=`</div></div>`;
+
+  visible.sort((a,b)=>{
+    if(a.done!==b.done) return a.done?1:-1;
+    if(a.date&&b.date) return a.date.localeCompare(b.date);
+    if(a.date) return -1; if(b.date) return 1;
+    return b.id-a.id;
+  });
+
+  if(hideDone) visible=visible.filter(t=>!t.done);
+
+  if(!visible.length){
+    const msgs={inbox:{icon:'📥',text:'Входящие пусты'},today:{icon:'☀️',text:'На сегодня всё готово!'},upcoming:{icon:'🗓',text:'Нет предстоящих задач'},all:{icon:'🐓',text:'Sem tarefas'}};
+    const e=msgs[currentTab]||msgs.all;
+    html+=`<div class="empty-state"><div class="empty-icon">${e.icon}</div><div class="empty-text">${e.text}</div></div>`;
+  } else {
+    visible.forEach(t=>{
+      const isScheduling=schedulingId===t.id;
+      let dateBadge='';
+      if(t.date){
+        if(t.date===todayStr()) dateBadge=`<span class="task-date today-badge">сегодня</span>`;
+        else if(t.date<todayStr()) dateBadge=`<span class="task-date overdue">просрочено · ${fmtDate(t.date)}</span>`;
+        else dateBadge=`<span class="task-date">${fmtDate(t.date)}</span>`;
+      }
+      const schedBtn=!t.date&&!t.done?`<button class="schedule-btn" onclick="startSchedule(${t.id})">📅 запланировать</button>`:'';
+      html+=`<div class="task-item${t.done?' done':''}" id="task-${t.id}">
+        <div class="check-box" onclick="toggleTask(${t.id})"><span class="check-mark">✓</span></div>
+        <div class="task-body">
+          <div class="task-text" onclick="toggleTask(${t.id})">${t.text}</div>
+          <div class="task-meta">${dateBadge}${schedBtn}</div>
+        </div>
+        <button class="del-btn" onclick="deleteTask(${t.id})">×</button>
+      </div>`;
+      if(isScheduling){
+        html+=`<div class="inline-date-picker">
+          <input type="date" id="sched-date-${t.id}" value="${todayStr()}" min="${todayStr()}">
+          <button onclick="applySchedule(${t.id})">✓ готово</button>
+          <button class="cancel-btn" onclick="schedulingId=null;renderContent()">отмена</button>
+        </div>`;
+      }
+    });
+  }
+
+  area.innerHTML=html;
+  const inp=document.getElementById('taskInput');
+  if(inp) inp.addEventListener('keydown', e=>{ if(e.key==='Enter'){ if(addingTask) confirmAddTask(); else startAddTask(); } });
+  renderNatas();
+  updateBadges();
+}
+
+function toggleHideDone(){ hideDone=!hideDone; renderContent(); }
+
+function clearDone(){
+  let visible=[];
+  if(currentTab==='inbox') visible=tasks.filter(t=>!t.date&&t.done);
+  else if(currentTab==='today') visible=tasks.filter(t=>t.date===todayStr()&&t.done);
+  else if(currentTab==='upcoming') visible=tasks.filter(t=>t.date&&t.date>todayStr()&&t.done);
+  else visible=tasks.filter(t=>t.done);
+  const ids=new Set(visible.map(t=>t.id));
+  tasks=tasks.filter(t=>!ids.has(t.id));
+  save(); renderContent();
+}
+
+function startAddTask(){ addingTask=true; renderContent(); setTimeout(()=>{ const i=document.getElementById('taskInput'); if(i) i.focus(); },50); }
+function confirmAddTask(){
+  const inp=document.getElementById('taskInput'); const text=inp?inp.value.trim():''; if(!text) return;
+  const dateEl=document.getElementById('newTaskDate'); const date=dateEl?dateEl.value:'';
+  const finalDate=date||(currentTab==='today'?todayStr():'');
+  tasks.unshift({id:Date.now(),text,done:false,date:finalDate});
+  addingTask=false; save(); renderContent();
+}
+function toggleTask(id){ const t=tasks.find(t=>t.id===id); if(t){t.done=!t.done;save();renderContent();} }
+function deleteTask(id){ tasks=tasks.filter(t=>t.id!==id); save(); renderContent(); }
+function startSchedule(id){ schedulingId=id; renderContent(); setTimeout(()=>{ const el=document.getElementById(`sched-date-${id}`); if(el) el.focus(); },50); }
+function applySchedule(id){ const el=document.getElementById(`sched-date-${id}`); if(!el||!el.value) return; const t=tasks.find(t=>t.id===id); if(t){t.date=el.value;save();} schedulingId=null; renderContent(); }
+
+// INIT
+if(!tasks.length){
+  tasks=[
+    {id:1,text:'забронировать отель в Фигейра-да-Фош',done:false,date:'2026-07-17'},
+    {id:2,text:'записаться в бассейн',done:false,date:''},
+    {id:3,text:'урок португальского',done:true,date:todayStr()},
+    {id:4,text:'прогулка вдоль океана в Кашкайше',done:false,date:todayStr()},
+    {id:5,text:'разместить tarefas на GitHub Pages',done:false,date:todayStr()},
+    {id:6,text:'получить карту ВНЖ',done:false,date:''},
+  ];
+  save();
+}
+renderContent();
+</script>
+</body>
+</html>
