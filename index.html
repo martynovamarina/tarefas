@@ -311,6 +311,11 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--ink);
 </nav>
 
 <script>
+const APP_VERSION = 'v5';
+if(localStorage.getItem('tarefas-version') !== APP_VERSION){
+  localStorage.removeItem('tarefas-v4');
+  localStorage.setItem('tarefas-version', APP_VERSION);
+}
 let tasks = JSON.parse(localStorage.getItem('tarefas-v4') || '[]');
 let currentTab = 'inbox';
 let schedulingId = null;
@@ -470,12 +475,14 @@ function applySchedule(id){ const el=document.getElementById(`sched-date-${id}`)
 // INIT
 if(!tasks.length){
   tasks=[
-    {id:1,text:'забронировать отель в Фигейра-да-Фош',done:false,date:'2026-07-17'},
-    {id:2,text:'записаться в бассейн',done:false,date:''},
-    {id:3,text:'урок португальского',done:true,date:todayStr()},
-    {id:4,text:'прогулка вдоль океана в Кашкайше',done:false,date:todayStr()},
-    {id:5,text:'разместить tarefas на GitHub Pages',done:false,date:todayStr()},
-    {id:6,text:'получить карту ВНЖ',done:false,date:''},
+    {id:1,text:'съесть вкусный паштель де ната ☕',done:false,date:todayStr()},
+    {id:2,text:'прогулка к океану 🌊',done:false,date:todayStr()},
+    {id:3,text:'позвонить лучшей подруге 💛',done:false,date:''},
+    {id:4,text:'купить что-то приятное себе 🛍',done:false,date:''},
+    {id:5,text:'обнять близкого человека 🤍',done:false,date:todayStr()},
+    {id:6,text:'посидеть в тишине с кофе ☕',done:false,date:''},
+    {id:7,text:'найти новый маршрут для прогулки 🗺',done:false,date:''},
+    {id:8,text:'написать что-то хорошее в дневник ✍️',done:false,date:''},
   ];
   save();
 }
