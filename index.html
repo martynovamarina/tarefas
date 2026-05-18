@@ -5,6 +5,23 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>Tarefas</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Nunito:wght@300;400;600;700&display=swap" rel="stylesheet">
+<meta name="apple-mobile-web-app-title" content="Minhas Tarefas">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="application-name" content="Minhas Tarefas">
+<meta name="description" content="Красивый планировщик задач в португальском стиле — с петухом Барселуш, азулежу и паштель де ната">
+<meta name="author" content="Marina Martynova">
+<meta name="copyright" content="© 2026 Marina Martynova. All rights reserved.">
+<meta name="theme-color" content="#2B5BA8">
+<meta property="og:title" content="Minhas Tarefas 🐓">
+<meta property="og:description" content="Планировщик задач в португальском стиле">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://martynovamarina.github.io/tarefas/">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Minhas Tarefas 🐓">
+<meta name="twitter:description" content="Планировщик задач в португальском стиле — с петухом Барселуш и паштель де ната">
+<link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'%3E%3Crect width='180' height='180' rx='40' fill='%232B5BA8'/%3E%3Cellipse cx='90' cy='148' rx='28' ry='9' fill='%231B6FC4'/%3E%3Crect x='72' y='138' width='36' height='12' rx='6' fill='%231B6FC4'/%3E%3Cpath d='M42 105 Q22 88 20 62 Q30 78 36 95Z' fill='%231A1008'/%3E%3Cpath d='M38 118 Q16 100 18 72 Q28 88 34 108Z' fill='%231A1008'/%3E%3Cellipse cx='92' cy='108' rx='46' ry='48' fill='%231A1008'/%3E%3Ccircle cx='54' cy='82' r='4' fill='white'/%3E%3Ccircle cx='68' cy='73' r='4' fill='white'/%3E%3Ccircle cx='84' cy='69' r='4' fill='white'/%3E%3Ccircle cx='100' cy='71' r='4' fill='white'/%3E%3Ccircle cx='114' cy='78' r='4' fill='white'/%3E%3Ccircle cx='122' cy='90' r='4' fill='white'/%3E%3Ccircle cx='54' cy='134' r='4' fill='white'/%3E%3Ccircle cx='68' cy='141' r='4' fill='white'/%3E%3Ccircle cx='84' cy='144' r='4' fill='white'/%3E%3Ccircle cx='100' cy='142' r='4' fill='white'/%3E%3Ccircle cx='114' cy='136' r='4' fill='white'/%3E%3Cpath d='M102 104 C102 96 93 90 87 95 C81 90 72 96 72 104 C72 115 87 126 87 126 C87 126 102 115 102 104Z' fill='%23C41230'/%3E%3Ccircle cx='56' cy='108' r='7' fill='%23E8D020'/%3E%3Ccircle cx='56' cy='100' r='5' fill='%232B8AE0'/%3E%3Ccircle cx='56' cy='116' r='5' fill='%232B8AE0'/%3E%3Ccircle cx='48' cy='108' r='5' fill='%23C41230'/%3E%3Ccircle cx='64' cy='108' r='5' fill='%23C41230'/%3E%3Ccircle cx='56' cy='108' r='5' fill='%23E8D020'/%3E%3Cpath d='M88 72 Q94 58 100 48 Q106 38 106 30 Q100 42 94 56 Q90 64 88 72Z' fill='%231A1008'/%3E%3Cellipse cx='106' cy='28' rx='26' ry='22' fill='%231A1008'/%3E%3Cpath d='M88 18 Q82 4 88 -4 Q91 6 94 -2 Q97 -10 101 -2 Q104 -10 108 -2 Q112 -10 115 0 Q118 10 112 18 Q102 22 92 18Z' fill='%23C41230'/%3E%3Cpath d='M124 32 Q136 40 132 52 Q126 56 118 50 Q114 42 118 32Z' fill='%23C41230'/%3E%3Ccircle cx='118' cy='22' r='8' fill='%23E8D020'/%3E%3Ccircle cx='118' cy='22' r='5' fill='%231A1008'/%3E%3Ccircle cx='116' cy='20' r='2' fill='white'/%3E%3Cpath d='M130 26 L148 29 L130 34Z' fill='%23E8D020'/%3E%3C/svg%3E">
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%232B5BA8'/%3E%3Ctext y='24' x='4' font-size='22'%3E%F0%9F%90%93%3C/text%3E%3C/svg%3E">
 <style>
 *{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
 :root{
@@ -124,9 +141,9 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--ink);
 
 /* ── TAB BAR ── */
 .tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:white;border-top:1px solid var(--blue-pale);display:flex;z-index:100;padding-bottom:env(safe-area-inset-bottom,0);box-shadow:0 -4px 20px rgba(43,91,168,.08)}
-.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;padding:10px 4px 8px;background:none;border:none;cursor:pointer;color:var(--muted);transition:color .2s;font-family:'Nunito',sans-serif;position:relative}
-.tab-icon{font-size:19px;line-height:1}
-.tab-label{font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+.tab-btn{flex:1;display:flex;flex-direction:column;align-items:center;gap:5px;padding:14px 4px 12px;background:none;border:none;cursor:pointer;color:var(--muted);transition:color .2s;font-family:'Nunito',sans-serif;position:relative}
+.tab-icon{font-size:24px;line-height:1}
+.tab-label{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
 .tab-badge{position:absolute;top:5px;right:calc(50% - 18px);background:var(--red);color:white;font-size:8px;font-weight:700;border-radius:10px;padding:1px 5px;min-width:15px;text-align:center}
 .tab-btn.active{color:var(--blue)}
 .tab-btn.active .tab-icon{transform:translateY(-2px)}
@@ -279,7 +296,7 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--ink);
 
 <!-- NATA PROGRESS -->
 <div class="nata-bar">
-  <div class="nata-bar-label">hoje</div>
+  <div class="nata-bar-label">hoje 🥧</div>
   <div class="natas" id="nataBarRow"></div>
   <div class="nata-count" id="nataCount">0/0</div>
 </div>
@@ -287,26 +304,31 @@ body{font-family:'Nunito',sans-serif;background:var(--cream);color:var(--ink);
 <!-- CONTENT -->
 <div class="content" id="contentArea"></div>
 
+<!-- COPYRIGHT -->
+<div style="text-align:center;padding:8px;font-size:10px;color:#b0a080;letter-spacing:.08em;font-family:'Nunito',sans-serif;opacity:.7">
+  © 2026 Marina Martynova · Minhas Tarefas 🐓
+</div>
+
 <!-- TAB BAR -->
 <nav class="tab-bar">
   <button class="tab-btn active" onclick="switchTab('inbox',this)">
     <span class="tab-icon">📥</span>
-    <span class="tab-label">Входящие</span>
+    <span class="tab-label">Entrada</span>
     <span class="tab-badge hidden" id="badge-inbox">0</span>
   </button>
   <button class="tab-btn" onclick="switchTab('today',this)">
     <span class="tab-icon">☀️</span>
-    <span class="tab-label">Сегодня</span>
+    <span class="tab-label">Hoje</span>
     <span class="tab-badge hidden" id="badge-today">0</span>
   </button>
   <button class="tab-btn" onclick="switchTab('upcoming',this)">
     <span class="tab-icon">📅</span>
-    <span class="tab-label">Скоро</span>
+    <span class="tab-label">Em breve</span>
     <span class="tab-badge hidden" id="badge-upcoming">0</span>
   </button>
   <button class="tab-btn" onclick="switchTab('all',this)">
     <span class="tab-icon">🗂</span>
-    <span class="tab-label">Все</span>
+    <span class="tab-label">Todas</span>
   </button>
 </nav>
 
@@ -373,28 +395,30 @@ function renderContent(){
   const area=document.getElementById('contentArea');
   let html='';
 
-  const placeholder = currentTab==='inbox'?'добавить во входящие…':currentTab==='today'?'добавить на сегодня…':'nova tarefa…';
-  html+=`<div class="add-row"><input type="text" id="taskInput" placeholder="${placeholder}" maxlength="140"><button class="add-btn" onclick="startAddTask()">+</button></div>`;
+  const placeholders={inbox:'escreve aqui e pressiona Enter…',today:'adicionar para hoje…',upcoming:'nova tarefa…',all:'nova tarefa…'};
+  const placeholder=placeholders[currentTab]||'nova tarefa…';
+  const addAction = currentTab==='inbox' ? 'addInboxTask()' : 'startAddTask()';
+  html+=`<div class="add-row"><input type="text" id="taskInput" placeholder="${placeholder}" maxlength="140"><button class="add-btn" onclick="${addAction}">+</button></div>`;
 
   if(addingTask){
     const defaultDate=currentTab==='today'?todayStr():'';
-    html+=`<div class="date-row"><label>📅 дата</label><input type="date" id="newTaskDate" value="${defaultDate}" min="${todayStr()}"><button class="save-task-btn" onclick="confirmAddTask()">Добавить</button></div>`;
+    html+=`<div class="date-row"><label>📅 data</label><input type="date" id="newTaskDate" value="${defaultDate}" min="${todayStr()}"><button class="save-task-btn" onclick="confirmAddTask()">Adicionar</button></div>`;
   }
 
   let visible=[];
   let label='';
-  if(currentTab==='inbox'){ visible=tasks.filter(t=>!t.date); label='Входящие'; }
-  else if(currentTab==='today'){ visible=tasks.filter(t=>t.date===todayStr()); label='Сегодня'; }
-  else if(currentTab==='upcoming'){ visible=tasks.filter(t=>t.date&&t.date>todayStr()); label='Предстоящие'; }
-  else{ visible=[...tasks]; label='Все задачи'; }
+  if(currentTab==='inbox'){ visible=tasks.filter(t=>!t.date); label='Entrada'; }
+  else if(currentTab==='today'){ visible=tasks.filter(t=>t.date===todayStr()); label='Hoje'; }
+  else if(currentTab==='upcoming'){ visible=tasks.filter(t=>t.date&&t.date>todayStr()); label='Em breve'; }
+  else{ visible=[...tasks]; label='Todas as tarefas'; }
 
   const doneCount=visible.filter(t=>t.done).length;
 
   // Section label + controls
   html+=`<div class="section-label"><span>${label} · ${visible.length}</span><div>`;
   if(doneCount>0){
-    html+=`<button class="hide-done-btn${hideDone?' active':''}" onclick="toggleHideDone()">${hideDone?'👁 показать':'🙈 скрыть'} выполненные</button>`;
-    html+=`<button class="clear-done-btn" onclick="clearDone()">🗑 удалить</button>`;
+    html+=`<button class="hide-done-btn${hideDone?' active':''}" onclick="toggleHideDone()">${hideDone?'👁 mostrar':'🙈 ocultar'} concluídas</button>`;
+    html+=`<button class="clear-done-btn" onclick="clearDone()">🗑 apagar</button>`;
   }
   html+=`</div></div>`;
 
@@ -408,7 +432,7 @@ function renderContent(){
   if(hideDone) visible=visible.filter(t=>!t.done);
 
   if(!visible.length){
-    const msgs={inbox:{icon:'📥',text:'Входящие пусты'},today:{icon:'☀️',text:'На сегодня всё готово!'},upcoming:{icon:'🗓',text:'Нет предстоящих задач'},all:{icon:'🐓',text:'Sem tarefas'}};
+    const msgs={inbox:{icon:'📥',text:'Caixa vazia · escreve e pressiona Enter'},today:{icon:'☀️',text:'Tudo feito hoje · parabéns!'},upcoming:{icon:'🗓',text:'Sem tarefas futuras'},all:{icon:'🐓',text:'Sem tarefas'}};
     const e=msgs[currentTab]||msgs.all;
     html+=`<div class="empty-state"><div class="empty-icon">${e.icon}</div><div class="empty-text">${e.text}</div></div>`;
   } else {
@@ -416,11 +440,11 @@ function renderContent(){
       const isScheduling=schedulingId===t.id;
       let dateBadge='';
       if(t.date){
-        if(t.date===todayStr()) dateBadge=`<span class="task-date today-badge">сегодня</span>`;
-        else if(t.date<todayStr()) dateBadge=`<span class="task-date overdue">просрочено · ${fmtDate(t.date)}</span>`;
+        if(t.date===todayStr()) dateBadge=`<span class="task-date today-badge">hoje</span>`;
+        else if(t.date<todayStr()) dateBadge=`<span class="task-date overdue">atrasado · ${fmtDate(t.date)}</span>`;
         else dateBadge=`<span class="task-date">${fmtDate(t.date)}</span>`;
       }
-      const schedBtn=!t.date&&!t.done?`<button class="schedule-btn" onclick="startSchedule(${t.id})">📅 запланировать</button>`:'';
+      const schedBtn=!t.date&&!t.done?`<button class="schedule-btn" onclick="startSchedule(${t.id})">📅 agendar</button>`:'';
       html+=`<div class="task-item${t.done?' done':''}" id="task-${t.id}">
         <div class="check-box" onclick="toggleTask(${t.id})"><span class="check-mark">✓</span></div>
         <div class="task-body">
@@ -432,8 +456,8 @@ function renderContent(){
       if(isScheduling){
         html+=`<div class="inline-date-picker">
           <input type="date" id="sched-date-${t.id}" value="${todayStr()}" min="${todayStr()}">
-          <button onclick="applySchedule(${t.id})">✓ готово</button>
-          <button class="cancel-btn" onclick="schedulingId=null;renderContent()">отмена</button>
+          <button onclick="applySchedule(${t.id})">✓ ok</button>
+          <button class="cancel-btn" onclick="schedulingId=null;renderContent()">cancelar</button>
         </div>`;
       }
     });
@@ -441,7 +465,17 @@ function renderContent(){
 
   area.innerHTML=html;
   const inp=document.getElementById('taskInput');
-  if(inp) inp.addEventListener('keydown', e=>{ if(e.key==='Enter'){ if(addingTask) confirmAddTask(); else startAddTask(); } });
+  if(inp) inp.addEventListener('keydown', e=>{
+    if(e.key==='Enter'){
+      const text=inp.value.trim();
+      if(!text) return;
+      if(currentTab==='inbox' && !addingTask){
+        tasks.unshift({id:Date.now(),text,done:false,date:''});
+        inp.value=''; save(); renderContent(); return;
+      }
+      if(addingTask) confirmAddTask(); else startAddTask();
+    }
+  });
   renderNatas();
   updateBadges();
 }
@@ -459,6 +493,7 @@ function clearDone(){
   save(); renderContent();
 }
 
+function addInboxTask(){ const inp=document.getElementById("taskInput"); const text=inp?inp.value.trim():""; if(!text) return; tasks.unshift({id:Date.now(),text,done:false,date:""}); if(inp) inp.value=""; save(); renderContent(); }
 function startAddTask(){ addingTask=true; renderContent(); setTimeout(()=>{ const i=document.getElementById('taskInput'); if(i) i.focus(); },50); }
 function confirmAddTask(){
   const inp=document.getElementById('taskInput'); const text=inp?inp.value.trim():''; if(!text) return;
