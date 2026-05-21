@@ -476,7 +476,7 @@ function renderContent(){
       if(t.date){if(t.date===todayStr())dateBadge=`<span class="task-date today-badge">сегодня</span>`;else if(t.date<todayStr())dateBadge=`<span class="task-date overdue">⚠ ${fmtDate(t.date)}</span>`;else dateBadge=`<span class="task-date">${fmtDate(t.date)}</span>`;}
       const catBadge=t.cat&&t.cat!=='none'?`<span class="task-cat-badge" style="background:${cat.bg};color:${cat.color}">${cat.label}</span>`:'';
       const repBadge=t.repeat&&t.repeat!=='none'?`<span class="task-repeat">🔁 ${REPEATS[t.repeat]}</span>`:'';
-      const schedBtn=!t.date&&!t.done?`<button class="schedule-btn" onclick="startSchedule(${t.id})">📅 запланировать</button>`:'';
+      const schedBtn=!t.done?`<button class="schedule-btn" onclick="startSchedule(${t.id})">📅 ${t.date?'изменить дату':'запланировать'}</button>`:'';
       const bc=t.cat&&CATS[t.cat]?CATS[t.cat].color:'#5B84CC';
 
       const prio=PRIORITIES[t.priority||'none'];
@@ -492,7 +492,7 @@ function renderContent(){
             <div class="priority-dot" title="${prio.label}" style="background:${prio.color}" onclick="cyclePriority(${t.id})"></div>
           </div>
           <div class="task-body">
-            ${isE?`<input class="task-edit-input" id="edit-${t.id}" value="${t.text.replace(/"/g,'&quot;')}" onkeydown="handleEditKey(event,${t.id})">`:`<div class="task-text" ondblclick="startEdit(${t.id})">${t.text}</div>`}
+            ${isE?`<input class="task-edit-input" id="edit-${t.id}" value="${t.text.replace(/"/g,'&quot;')}" onkeydown="handleEditKey(event,${t.id})">`:`<div class="task-text" onclick="startEdit(${t.id})">${t.text}</div>`}
             ${noteHtml}${noteEditHtml}
             <div class="task-meta">${dateBadge}${catBadge}${repBadge}${schedBtn}<button class="note-toggle" onclick="toggleNote(${t.id})">${t.note?'📝':'+ заметка'}</button></div>
           </div>
@@ -505,7 +505,7 @@ function renderContent(){
       </div>`;
 
       if(isS){html+=`<div class="inline-picker">
-        <input type="date" id="sched-date-${t.id}" value="${todayStr()}" min="${todayStr()}">
+        <input type="date" id="sched-date-${t.id}" value="${t.date||todayStr()}" min="">
         <select id="sched-cat-${t.id}">${Object.keys(CATS).filter(k=>k!=='none').map(k=>`<option value="${k}"${t.cat===k?' selected':''}>${CATS[k].label}</option>`).join('')}</select>
         <select id="sched-rep-${t.id}">${Object.keys(REPEATS).map(k=>`<option value="${k}"${t.repeat===k?' selected':''}>${REPEATS[k]}</option>`).join('')}</select>
         <button onclick="applySchedule(${t.id})">✓ ok</button>
