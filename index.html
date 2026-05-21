@@ -64,8 +64,8 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);
 .nata{font-size:19px;filter:grayscale(1) opacity(.2);transition:all .4s cubic-bezier(.34,1.56,.64,1);line-height:1}
 .nata.on{filter:none;animation:nataIn .45s cubic-bezier(.34,1.56,.64,1)}
 @keyframes nataIn{0%{transform:scale(.3) rotate(-15deg);opacity:0}100%{transform:scale(1) rotate(0);opacity:1}}
-.dark-btn{position:absolute;top:10px;right:10px;z-index:10;background:rgba(255,255,255,.3);border:none;border-radius:20px;padding:4px 10px;font-size:14px;cursor:pointer;backdrop-filter:blur(4px)}
-[data-dark] .dark-btn{background:rgba(0,0,0,.4)}
+.dark-btn{background:none;border:1px solid rgba(255,255,255,.3);border-radius:20px;padding:3px 10px;font-size:14px;cursor:pointer;color:var(--gold);flex-shrink:0;font-family:"Nunito",sans-serif;font-size:12px;font-weight:700;letter-spacing:.04em}
+.dark-btn:hover{background:rgba(255,255,255,.1)}
 
 .azulejo-bar{height:18px;background:#2B5BA8;flex-shrink:0;overflow:hidden}
 .waves{position:relative;height:42px;background:#4A9EC4;flex-shrink:0;overflow:hidden}
@@ -177,11 +177,38 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);
 .tab-btn.active .tab-icon{transform:translateY(-3px)}
 .copyright{text-align:center;padding:6px;font-size:10px;color:var(--muted);opacity:.5;font-family:'Nunito',sans-serif}
 .hidden{display:none!important}
+
+/* CONFETTI */
+.confetti-wrap{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:9999;overflow:hidden}
+.confetti-piece{position:absolute;width:10px;height:10px;border-radius:2px;animation:confettiFall linear forwards}
+@keyframes confettiFall{0%{transform:translateY(-20px) rotate(0deg);opacity:1}100%{transform:translateY(100vh) rotate(720deg);opacity:0}}
+
+/* PRIORITY */
+.priority-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;margin-top:6px;cursor:pointer;transition:transform .15s}
+.priority-dot:hover{transform:scale(1.3)}
+
+/* NOTES */
+.task-note{font-size:12px;color:var(--muted);margin-top:3px;line-height:1.4;font-style:italic}
+.task-note-input{width:100%;border:none;border-bottom:1px solid var(--blue-pale);background:transparent;font-family:"Nunito",sans-serif;font-size:12px;color:var(--muted);outline:none;padding:2px 0;font-style:italic;margin-top:4px}
+.note-toggle{font-size:10px;color:var(--muted);background:none;border:none;cursor:pointer;font-family:"Nunito",sans-serif;font-weight:700;padding:0;transition:color .15s}
+.note-toggle:hover{color:var(--blue)}
+
+/* PIN */
+.pin-btn{background:none;border:none;font-size:13px;cursor:pointer;padding:2px;opacity:.4;transition:opacity .15s;line-height:1}
+.pin-btn.pinned{opacity:1}
+.task-item.pinned-task{background:var(--gold) !important;background:linear-gradient(135deg,rgba(212,160,23,.08),rgba(212,160,23,.03)) !important}
+[data-dark] .task-item.pinned-task{background:linear-gradient(135deg,rgba(232,192,64,.1),rgba(232,192,64,.04)) !important}
+
+/* SWIPE */
+.swipe-wrap{position:relative;overflow:hidden}
+.swipe-bg{position:absolute;top:0;bottom:0;display:flex;align-items:center;padding:0 20px;font-size:20px;transition:opacity .2s;z-index:0}
+.swipe-bg-left{left:0;background:var(--red-light);color:var(--red)}
+.swipe-bg-right{right:0;background:var(--green-light);color:var(--green)}
+.swipe-item{position:relative;z-index:1;transition:transform .15s;background:var(--card);touch-action:pan-y}
+
 </style>
 </head>
 <body>
-
-<button class="dark-btn" onclick="toggleDark()" id="darkBtn">🌙</button>
 
 <div class="header">
   <div class="sky">
@@ -260,7 +287,7 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);
 </div>
 
 <div class="waves">
-  <div class="waves-label">oceano atlântico</div>
+  <div class="waves-label">Атлантический океан</div>
   <div class="boat">⛵</div>
   <svg class="wave w1" viewBox="0 0 1600 42" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M0 24 Q100 6 200 24 Q300 42 400 24 Q500 6 600 24 Q700 42 800 24 Q900 6 1000 24 Q1100 42 1200 24 Q1300 6 1400 24 Q1500 42 1600 24 L1600 42 L0 42Z" fill="#EAF4FB"/>
@@ -271,52 +298,53 @@ body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--ink);
 </div>
 
 <div class="nata-bar">
-  <div class="nata-bar-label">hoje</div>
+  <div class="nata-bar-label">сегодня</div>
   <div class="natas" id="nataBarRow"></div>
   <div class="nata-count" id="nataCount">0/0</div>
+  <button class="dark-btn" onclick="toggleDark()" id="darkBtn">🌙</button>
 </div>
 
 <div class="search-bar" id="searchBar">
-  <input type="text" id="searchInput" placeholder="🔍 pesquisar tarefas…" oninput="onSearch()">
+  <input type="text" id="searchInput" placeholder="🔍 поиск задач…" oninput="onSearch()">
   <button class="search-clear hidden" id="searchClear" onclick="clearSearch()">×</button>
 </div>
 
 <div class="content" id="contentArea"></div>
-<div class="copyright">© 2026 Marina Martynova · Tarefas de Portugal 🐓</div>
+<div class="copyright">© 2026 Marina Martynova · Мои задачи 🐓</div>
 
 <nav class="tab-bar">
   <button class="tab-btn active" onclick="switchTab('inbox',this)">
-    <span class="tab-icon">📥</span><span class="tab-label">Entrada</span>
+    <span class="tab-icon">📥</span><span class="tab-label">Входящие</span>
     <span class="tab-badge hidden" id="badge-inbox"></span>
   </button>
   <button class="tab-btn" onclick="switchTab('today',this)">
-    <span class="tab-icon">☀️</span><span class="tab-label">Hoje</span>
+    <span class="tab-icon">☀️</span><span class="tab-label">Сегодня</span>
     <span class="tab-badge hidden" id="badge-today"></span>
   </button>
   <button class="tab-btn" onclick="switchTab('upcoming',this)">
-    <span class="tab-icon">📅</span><span class="tab-label">Em breve</span>
+    <span class="tab-icon">📅</span><span class="tab-label">Скоро</span>
     <span class="tab-badge hidden" id="badge-upcoming"></span>
   </button>
   <button class="tab-btn" onclick="switchTab('stats',this)">
-    <span class="tab-icon">📊</span><span class="tab-label">Stats</span>
+    <span class="tab-icon">📊</span><span class="tab-label">Статистика</span>
   </button>
   <button class="tab-btn" onclick="switchTab('all',this)">
-    <span class="tab-icon">🗂</span><span class="tab-label">Todas</span>
+    <span class="tab-icon">🗂</span><span class="tab-label">Все</span>
   </button>
 </nav>
 
 <script>
 const CATS={
-  none:   {label:'Todas',   color:'#8A7860',bg:'#F0EAD8'},
-  life:   {label:'🌸 Vida',  color:'#C41230',bg:'#FAE8EC'},
-  work:   {label:'💼 Trabalho',color:'#2B5BA8',bg:'#D6E4F7'},
-  health: {label:'🏃 Saúde', color:'#2D7A4F',bg:'#E8F5EE'},
-  home:   {label:'🏠 Casa',  color:'#B07830',bg:'#F5EDD6'},
-  fun:    {label:'✨ Lazer', color:'#8B38C0',bg:'#EEE0FA'},
+  none:   {label:'Все',   color:'#8A7860',bg:'#F0EAD8'},
+  life:   {label:'🌸 Жизнь',  color:'#C41230',bg:'#FAE8EC'},
+  work:   {label:'💼 Работа',color:'#2B5BA8',bg:'#D6E4F7'},
+  health: {label:'🏃 Здоровье', color:'#2D7A4F',bg:'#E8F5EE'},
+  home:   {label:'🏠 Дом',  color:'#B07830',bg:'#F5EDD6'},
+  fun:    {label:'✨ Досуг', color:'#8B38C0',bg:'#EEE0FA'},
 };
-const REPEATS={none:'Não repete',daily:'Todos os dias',weekly:'Toda a semana',monthly:'Todo o mês'};
+const REPEATS={none:'Не повторяется',daily:'Каждый день',weekly:'Каждую неделю',monthly:'Каждый месяц'};
 
-const VER='v6';
+const VER='v7';
 if(localStorage.getItem('tarefas-ver')!==VER){localStorage.removeItem('tarefas-v4');localStorage.setItem('tarefas-ver',VER);}
 let tasks=JSON.parse(localStorage.getItem('tarefas-v4')||'[]');
 let currentTab='inbox',schedulingId=null,editingId=null,addingTask=false,hideDone=false,filterCat='none',searchQ='';
@@ -325,15 +353,15 @@ let darkMode=localStorage.getItem('darkMode')==='1';
 const TODAY=new Date();TODAY.setHours(0,0,0,0);
 function todayStr(){return TODAY.toISOString().split('T')[0];}
 
-if(darkMode){document.documentElement.setAttribute('data-dark','');document.getElementById('darkBtn').textContent='☀️';}
-function toggleDark(){darkMode=!darkMode;darkMode?document.documentElement.setAttribute('data-dark',''):document.documentElement.removeAttribute('data-dark');localStorage.setItem('darkMode',darkMode?'1':'0');document.getElementById('darkBtn').textContent=darkMode?'☀️':'🌙';}
+if(darkMode){document.documentElement.setAttribute('data-dark','');const db=document.getElementById('darkBtn');if(db)db.textContent='☀️';}
+function toggleDark(){darkMode=!darkMode;darkMode?document.documentElement.setAttribute('data-dark',''):document.documentElement.removeAttribute('data-dark');localStorage.setItem('darkMode',darkMode?'1':'0');const db=document.getElementById('darkBtn');if(db)db.textContent=darkMode?'☀️':'🌙';}
 
 function save(){localStorage.setItem('tarefas-v4',JSON.stringify(tasks));}
 
-const days=['dom','seg','ter','qua','qui','sex','sáb'];
-const daysFull=['domingo','segunda-feira','terça-feira','quarta-feira','quinta-feira','sexta-feira','sábado'];
-const months=['janeiro','fevereiro','março','abril','maio','junho','julho','agosto','setembro','outubro','novembro','dezembro'];
-document.getElementById('dateEl').textContent=`${daysFull[TODAY.getDay()]}, ${TODAY.getDate()} de ${months[TODAY.getMonth()]}`;
+const days=['вс','пн','вт','ср','чт','пт','сб'];
+const daysFull=['воскресенье','понедельник','вторник','среда','четверг','пятница','суббота'];
+const months=['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+document.getElementById('dateEl').textContent=`${daysFull[TODAY.getDay()]}, ${TODAY.getDate()} ${months[TODAY.getMonth()]}`;
 function fmtDate(s){const d=new Date(s+'T00:00:00');return `${d.getDate()} ${months[d.getMonth()]}`;}
 
 function nextDate(ds,rep){const d=new Date(ds+'T00:00:00');if(rep==='daily')d.setDate(d.getDate()+1);if(rep==='weekly')d.setDate(d.getDate()+7);if(rep==='monthly')d.setMonth(d.getMonth()+1);return d.toISOString().split('T')[0];}
@@ -375,24 +403,24 @@ function renderStats(){
   const maxC=Math.max(...Object.values(catC),1);
 
   area.innerHTML=`<div class="stats-section">
-  <div class="stats-title">Estatísticas ✨</div>
+  <div class="stats-title">Статистика ✨</div>
   <div class="stats-card">
-    <div class="stats-card-title">Progresso geral</div>
+    <div class="stats-card-title">Общий прогресс</div>
     <div class="stats-number">${pct}%</div>
-    <div class="stats-sub">${done} de ${total} tarefas concluídas</div>
+    <div class="stats-sub">${done} из ${total} задач выполнено</div>
   </div>
   <div class="stats-card">
-    <div class="stats-card-title">Esta semana · pastéis de nata 🥧</div>
+    <div class="stats-card-title">На этой неделе · паштели де ната 🥧</div>
     <div class="nata-week">${'🥧'.repeat(Math.min(weekNatas,16))}</div>
-    <div class="stats-sub" style="margin-top:6px">${weekNatas} tarefas concluídas</div>
+    <div class="stats-sub" style="margin-top:6px">${weekNatas} задач выполнено</div>
     <div class="week-bars">${weekData.map(d=>`<div class="week-bar-wrap"><div class="week-bar-count">${d.count||''}</div><div class="week-bar${d.date===todayStr()?' today-bar':''}" style="height:${Math.max(d.count/maxW*55,3)}px"></div><div class="week-bar-label">${d.label}</div></div>`).join('')}</div>
   </div>
   <div class="stats-card">
-    <div class="stats-card-title">Série consecutiva 🔥</div>
-    <div class="streak-wrap"><div class="streak-num">${streak}</div><div class="streak-text">dias seguidos<br>com tarefas concluídas</div></div>
+    <div class="stats-card-title">Серия подряд 🔥</div>
+    <div class="streak-wrap"><div class="streak-num">${streak}</div><div class="streak-text">дней подряд<br>с выполненными задачами</div></div>
   </div>
   <div class="stats-card">
-    <div class="stats-card-title">Por categoria</div>
+    <div class="stats-card-title">По категориям</div>
     <div class="cat-stats">${Object.keys(CATS).filter(k=>k!=='none').map(k=>`<div class="cat-stat-row"><div class="cat-stat-label" style="color:${CATS[k].color}">${CATS[k].label}</div><div class="cat-stat-bar-wrap"><div class="cat-stat-bar" style="width:${catC[k]/maxC*100}%;background:${CATS[k].color}"></div></div><div class="cat-stat-count">${catC[k]}</div></div>`).join('')}</div>
   </div>
   </div>`;
@@ -410,41 +438,41 @@ function renderContent(){
   html+=`</div>`;
 
   // Add row
-  const ph={inbox:'escreve e pressiona Enter…',today:'adicionar para hoje…',upcoming:'nova tarefa…',all:'nova tarefa…'};
+  const ph={inbox:'пиши и нажми Enter…',today:'добавить на сегодня…',upcoming:'новая задача…',all:'новая задача…'};
   const addAct=currentTab==='inbox'?'addInboxTask()':'startAddTask()';
-  html+=`<div class="add-row"><input type="text" id="taskInput" placeholder="${ph[currentTab]||'nova tarefa…'}" maxlength="140"><button class="add-btn" onclick="${addAct}">+</button></div>`;
+  html+=`<div class="add-row"><input type="text" id="taskInput" placeholder="${ph[currentTab]||'новая задача…'}" maxlength="140"><button class="add-btn" onclick="${addAct}">+</button></div>`;
 
   if(addingTask){
     const defDate=currentTab==='today'?todayStr():'';
     html+=`<div class="options-row">
-      <label>📅</label><input type="date" id="newTaskDate" value="${defDate}" min="${todayStr()}">
-      <label>🏷</label><select id="newTaskCat">${Object.keys(CATS).filter(k=>k!=='none').map(k=>`<option value="${k}">${CATS[k].label}</option>`).join('')}</select>
-      <label>🔁</label><select id="newTaskRepeat">${Object.keys(REPEATS).map(k=>`<option value="${k}">${REPEATS[k]}</option>`).join('')}</select>
-      <button class="save-task-btn" onclick="confirmAddTask()">Adicionar</button>
+      <label>📅 дата</label><input type="date" id="newTaskDate" value="${defDate}" min="${todayStr()}">
+      <label>🏷 категория</label><select id="newTaskCat">${Object.keys(CATS).filter(k=>k!=='none').map(k=>`<option value="${k}">${CATS[k].label}</option>`).join('')}</select>
+      <label>🔁 повтор</label><select id="newTaskRepeat">${Object.keys(REPEATS).map(k=>`<option value="${k}">${REPEATS[k]}</option>`).join('')}</select>
+      <button class="save-task-btn" onclick="confirmAddTask()">Добавить</button>
     </div>`;
   }
 
   let visible=[];let label='';
-  if(currentTab==='inbox'){visible=tasks.filter(t=>!t.date);label='Entrada';}
-  else if(currentTab==='today'){visible=tasks.filter(t=>t.date===todayStr());label='Hoje';}
-  else if(currentTab==='upcoming'){visible=tasks.filter(t=>t.date&&t.date>todayStr());label='Em breve';}
-  else{visible=[...tasks];label='Todas as tarefas';}
+  if(currentTab==='inbox'){visible=tasks.filter(t=>!t.date);label='Входящие';}
+  else if(currentTab==='today'){visible=tasks.filter(t=>t.date===todayStr());label='Сегодня';}
+  else if(currentTab==='upcoming'){visible=tasks.filter(t=>t.date&&t.date>todayStr());label='Скоро';}
+  else{visible=[...tasks];label='Все задачи';}
   if(filterCat!=='none')visible=visible.filter(t=>t.cat===filterCat);
   if(searchQ)visible=visible.filter(t=>t.text.toLowerCase().includes(searchQ));
   const doneCount=visible.filter(t=>t.done).length;
 
   html+=`<div class="section-label"><span>${label} · ${visible.length}</span><div class="section-actions">`;
   if(doneCount>0){
-    html+=`<button class="hide-done-btn${hideDone?' active':''}" onclick="toggleHideDone()">${hideDone?'👁':'🙈'} ${hideDone?'mostrar':'ocultar'}</button>`;
-    html+=`<button class="clear-done-btn" onclick="clearDone()">🗑 apagar</button>`;
+    html+=`<button class="hide-done-btn${hideDone?' active':''}" onclick="toggleHideDone()">${hideDone?'👁':'🙈'} ${hideDone?'показать':'скрыть'}</button>`;
+    html+=`<button class="clear-done-btn" onclick="clearDone()">🗑 удалить</button>`;
   }
   html+=`</div></div>`;
 
-  visible.sort((a,b)=>{if(a.done!==b.done)return a.done?1:-1;if(a.date&&b.date)return a.date.localeCompare(b.date);if(a.date)return -1;if(b.date)return 1;return b.id-a.id;});
+  visible.sort((a,b)=>{if(a.done!==b.done)return a.done?1:-1;if(b.pinned&&!a.pinned)return 1;if(a.pinned&&!b.pinned)return -1;if(a.date&&b.date)return a.date.localeCompare(b.date);if(a.date)return -1;if(b.date)return 1;return b.id-a.id;});
   if(hideDone)visible=visible.filter(t=>!t.done);
 
   if(!visible.length){
-    const msgs={inbox:{icon:'📥',text:'Caixa vazia · escreve e pressiona Enter'},today:{icon:'☀️',text:'Tudo feito hoje · parabéns!'},upcoming:{icon:'🗓',text:'Sem tarefas futuras'},all:{icon:'🐓',text:'Sem tarefas'}};
+    const msgs={inbox:{icon:'📥',text:'Пусто · пиши и нажми Enter'},today:{icon:'☀️',text:'На сегодня всё готово!'},upcoming:{icon:'🗓',text:'Нет предстоящих задач'},all:{icon:'🐓',text:'Нет задач'}};
     const e=msgs[currentTab]||msgs.all;
     html+=`<div class="empty-state"><div class="empty-icon">${e.icon}</div><div class="empty-text">${e.text}</div></div>`;
   } else {
@@ -452,21 +480,34 @@ function renderContent(){
       const isS=schedulingId===t.id,isE=editingId===t.id;
       const cat=CATS[t.cat||'none']||CATS.none;
       let dateBadge='';
-      if(t.date){if(t.date===todayStr())dateBadge=`<span class="task-date today-badge">hoje</span>`;else if(t.date<todayStr())dateBadge=`<span class="task-date overdue">⚠ ${fmtDate(t.date)}</span>`;else dateBadge=`<span class="task-date">${fmtDate(t.date)}</span>`;}
+      if(t.date){if(t.date===todayStr())dateBadge=`<span class="task-date today-badge">сегодня</span>`;else if(t.date<todayStr())dateBadge=`<span class="task-date overdue">⚠ ${fmtDate(t.date)}</span>`;else dateBadge=`<span class="task-date">${fmtDate(t.date)}</span>`;}
       const catBadge=t.cat&&t.cat!=='none'?`<span class="task-cat-badge" style="background:${cat.bg};color:${cat.color}">${cat.label}</span>`:'';
       const repBadge=t.repeat&&t.repeat!=='none'?`<span class="task-repeat">🔁 ${REPEATS[t.repeat]}</span>`:'';
-      const schedBtn=!t.date&&!t.done?`<button class="schedule-btn" onclick="startSchedule(${t.id})">📅 agendar</button>`:'';
+      const schedBtn=!t.date&&!t.done?`<button class="schedule-btn" onclick="startSchedule(${t.id})">📅 запланировать</button>`:'';
       const bc=t.cat&&CATS[t.cat]?CATS[t.cat].color:'#5B84CC';
 
-      html+=`<div class="task-item${t.done?' done':''}" id="task-${t.id}" style="border-left:3px solid ${bc}${t.done?'55':'99'}">
-        <div class="check-box" onclick="toggleTask(${t.id})"><span class="check-mark">✓</span></div>
-        <div class="task-body">
-          ${isE?`<input class="task-edit-input" id="edit-${t.id}" value="${t.text.replace(/"/g,'&quot;')}" onkeydown="handleEditKey(event,${t.id})">`:`<div class="task-text" ondblclick="startEdit(${t.id})">${t.text}</div>`}
-          <div class="task-meta">${dateBadge}${catBadge}${repBadge}${schedBtn}</div>
-        </div>
-        <div class="task-actions">
-          ${isE?`<button class="edit-btn" onclick="saveEdit(${t.id})">✓</button>`:`<button class="edit-btn" onclick="startEdit(${t.id})">✏️</button>`}
-          <button class="del-btn" onclick="deleteTask(${t.id})">×</button>
+      const prio=PRIORITIES[t.priority||'none'];
+      const noteHtml=t.note?`<div class="task-note">${t.note}</div>`:'';
+      const noteEditHtml=editingNoteId===t.id?`<input class="task-note-input" id="note-${t.id}" value="${(t.note||'').replace(/"/g,'&quot;')}" placeholder="добавить заметку…" onkeydown="if(event.key==='Enter')saveNote(${t.id});if(event.key==='Escape'){editingNoteId=null;renderContent();}">`:'' ;
+
+      html+=`<div class="swipe-wrap" id="swipe-${t.id}">
+        <div class="swipe-bg swipe-bg-left">🗑</div>
+        <div class="swipe-bg swipe-bg-right">✓</div>
+        <div class="task-item swipe-item${t.done?' done':''}${t.pinned?' pinned-task':''}" id="task-${t.id}" style="border-left:3px solid ${bc}${t.done?'55':'99'}">
+          <div style="display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0">
+            <div class="check-box" onclick="toggleTask(${t.id})"><span class="check-mark">✓</span></div>
+            <div class="priority-dot" title="${prio.label}" style="background:${prio.color}" onclick="cyclePriority(${t.id})"></div>
+          </div>
+          <div class="task-body">
+            ${isE?`<input class="task-edit-input" id="edit-${t.id}" value="${t.text.replace(/"/g,'&quot;')}" onkeydown="handleEditKey(event,${t.id})">`:`<div class="task-text" ondblclick="startEdit(${t.id})">${t.text}</div>`}
+            ${noteHtml}${noteEditHtml}
+            <div class="task-meta">${dateBadge}${catBadge}${repBadge}${schedBtn}<button class="note-toggle" onclick="toggleNote(${t.id})">${t.note?'📝':'+ заметка'}</button></div>
+          </div>
+          <div class="task-actions">
+            <button class="pin-btn${t.pinned?' pinned':''}" onclick="togglePin(${t.id})" title="${t.pinned?'Открепить':'Закрепить'}">📌</button>
+            ${isE?`<button class="edit-btn" onclick="saveEdit(${t.id})">✓</button>`:`<button class="edit-btn" onclick="startEdit(${t.id})">✏️</button>`}
+            <button class="del-btn" onclick="deleteTask(${t.id})">×</button>
+          </div>
         </div>
       </div>`;
 
@@ -481,7 +522,14 @@ function renderContent(){
   }
 
   area.innerHTML=html;
+  // Init swipe on all task items
+  document.querySelectorAll('[id^="swipe-"]').forEach(wrap=>{
+    const id=parseInt(wrap.id.replace('swipe-',''));
+    const inner=wrap.querySelector('.swipe-item');
+    if(inner)initSwipe(inner,id);
+  });
   if(editingId){const i=document.getElementById(`edit-${editingId}`);if(i){i.focus();i.setSelectionRange(i.value.length,i.value.length);}}
+  if(editingNoteId){const ni=document.getElementById('note-'+editingNoteId);if(ni){ni.focus();ni.setSelectionRange(ni.value.length,ni.value.length);}}
   const inp=document.getElementById('taskInput');
   if(inp)inp.addEventListener('keydown',e=>{
     if(e.key==='Enter'){const text=inp.value.trim();if(!text)return;
@@ -489,6 +537,64 @@ function renderContent(){
       if(addingTask)confirmAddTask();else startAddTask();}
   });
   renderNatas();updateBadges();
+}
+
+// ══ CONFETTI ══
+function launchConfetti(){
+  const wrap=document.createElement('div');wrap.className='confetti-wrap';document.body.appendChild(wrap);
+  const colors=['#C41230','#2B5BA8','#D4A017','#2D7A4F','#8B38C0','#E8D020'];
+  for(let i=0;i<40;i++){
+    const p=document.createElement('div');p.className='confetti-piece';
+    p.style.cssText=`left:${Math.random()*100}%;background:${colors[Math.floor(Math.random()*colors.length)]};width:${6+Math.random()*8}px;height:${6+Math.random()*8}px;border-radius:${Math.random()>.5?'50%':'2px'};animation-duration:${0.8+Math.random()*1.2}s;animation-delay:${Math.random()*0.4}s`;
+    wrap.appendChild(p);
+  }
+  setTimeout(()=>wrap.remove(),2000);
+}
+
+// ══ PRIORITY ══
+const PRIORITIES={none:{color:'#D0C8B8',label:'—'},high:{color:'#C41230',label:'Высокий'},medium:{color:'#D4A017',label:'Средний'},low:{color:'#2D7A4F',label:'Низкий'}};
+function cyclePriority(id){
+  const t=tasks.find(t=>t.id===id);if(!t)return;
+  const order=['none','high','medium','low'];
+  const i=order.indexOf(t.priority||'none');
+  t.priority=order[(i+1)%order.length];
+  save();renderContent();
+}
+
+// ══ NOTES ══
+let editingNoteId=null;
+function toggleNote(id){editingNoteId=editingNoteId===id?null:id;renderContent();}
+function saveNote(id){
+  const inp=document.getElementById('note-'+id);
+  const t=tasks.find(t=>t.id===id);
+  if(t&&inp)t.note=inp.value;
+  editingNoteId=null;save();renderContent();
+}
+
+// ══ PIN ══
+function togglePin(id){
+  const t=tasks.find(t=>t.id===id);if(!t)return;
+  t.pinned=!t.pinned;save();renderContent();
+}
+
+// ══ SWIPE ══
+function initSwipe(el,id){
+  let startX=0,curX=0,swiping=false;
+  const THRESH=80;
+  el.addEventListener('touchstart',e=>{startX=e.touches[0].clientX;curX=startX;swiping=true;},{passive:true});
+  el.addEventListener('touchmove',e=>{
+    if(!swiping)return;
+    curX=e.touches[0].clientX;
+    const dx=curX-startX;
+    if(Math.abs(dx)>10)el.style.transform=`translateX(${Math.max(-120,Math.min(0,dx))}px)`;
+  },{passive:true});
+  el.addEventListener('touchend',()=>{
+    if(!swiping)return;swiping=false;
+    const dx=curX-startX;
+    el.style.transform='';
+    if(dx<-THRESH){deleteTask(id);}
+    else if(dx>THRESH){toggleTask(id);}
+  });
 }
 
 function setFilterCat(c){filterCat=c;renderContent();}
@@ -504,6 +610,7 @@ function clearDone(){
 function addInboxTask(){const inp=document.getElementById('taskInput');const text=inp?inp.value.trim():'';if(!text)return;tasks.unshift({id:Date.now(),text,done:false,date:'',cat:'none',repeat:'none'});if(inp)inp.value='';save();renderContent();}
 function startAddTask(){addingTask=true;renderContent();setTimeout(()=>{const i=document.getElementById('taskInput');if(i)i.focus();},50);}
 function confirmAddTask(){
+  if(editingNoteId){const ni=document.getElementById('note-'+editingNoteId);if(ni){ni.focus();ni.setSelectionRange(ni.value.length,ni.value.length);}}
   const inp=document.getElementById('taskInput');const text=inp?inp.value.trim():'';if(!text)return;
   const date=(document.getElementById('newTaskDate')||{}).value||'';
   const cat=(document.getElementById('newTaskCat')||{}).value||'none';
@@ -514,8 +621,23 @@ function confirmAddTask(){
 function toggleTask(id){
   const t=tasks.find(t=>t.id===id);if(!t)return;
   t.done=!t.done;
-  if(t.done){t.completedDate=todayStr();if(t.repeat&&t.repeat!=='none'&&t.date)tasks.push({id:Date.now(),text:t.text,done:false,date:nextDate(t.date,t.repeat),cat:t.cat,repeat:t.repeat});}
-  else delete t.completedDate;
+  if(t.done){
+    launchConfetti();
+    t.completedDate=todayStr();
+    // For recurring tasks: schedule next occurrence by updating the date
+    if(t.repeat&&t.repeat!=='none'){
+      // After a short delay, reset to next date so it shows up again
+      setTimeout(()=>{
+        const still=tasks.find(x=>x.id===id);
+        if(still&&still.done){
+          still.done=false;
+          delete still.completedDate;
+          still.date=nextDate(todayStr(),still.repeat);
+          save();renderContent();
+        }
+      }, 1500);
+    }
+  } else { delete t.completedDate; }
   save();renderContent();
 }
 function deleteTask(id){tasks=tasks.filter(t=>t.id!==id);save();renderContent();}
@@ -533,14 +655,14 @@ function applySchedule(id){
 
 if(!tasks.length){
   tasks=[
-    {id:1,text:'comer um pastel de nata fresquinho ☕',done:false,date:todayStr(),cat:'life',repeat:'none'},
-    {id:2,text:'passear junto ao oceano 🌊',done:false,date:todayStr(),cat:'health',repeat:'none'},
-    {id:3,text:'ligar à melhor amiga 💛',done:false,date:'',cat:'life',repeat:'none'},
-    {id:4,text:'comprar algo bonito para mim 🛍',done:false,date:'',cat:'fun',repeat:'none'},
-    {id:5,text:'abraçar alguém querido 🤍',done:false,date:todayStr(),cat:'life',repeat:'none'},
-    {id:6,text:'sentar em silêncio com um café ☕',done:false,date:'',cat:'life',repeat:'daily'},
-    {id:7,text:'descobrir um novo percurso a pé 🗺',done:false,date:'',cat:'health',repeat:'none'},
-    {id:8,text:'escrever algo bonito no diário ✍️',done:false,date:'',cat:'fun',repeat:'weekly'},
+    {id:1,text:'съесть свежий паштель де ната ☕',done:false,date:todayStr(),cat:'life',repeat:'none'},
+    {id:2,text:'прогулка вдоль океана 🌊',done:false,date:todayStr(),cat:'health',repeat:'none'},
+    {id:3,text:'позвонить лучшей подруге 💛',done:false,date:'',cat:'life',repeat:'none'},
+    {id:4,text:'купить что-то приятное себе 🛍',done:false,date:'',cat:'fun',repeat:'none'},
+    {id:5,text:'обнять близкого человека 🤍',done:false,date:todayStr(),cat:'life',repeat:'none'},
+    {id:6,text:'посидеть в тишине с кофе ☕',done:false,date:'',cat:'life',repeat:'daily'},
+    {id:7,text:'найти новый маршрут для прогулки 🗺',done:false,date:'',cat:'health',repeat:'none'},
+    {id:8,text:'написать что-то хорошее в дневник ✍️',done:false,date:'',cat:'fun',repeat:'weekly'},
   ];
   save();
 }
